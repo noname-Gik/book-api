@@ -11,7 +11,7 @@ using bookAPI.Data;
 namespace bookAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220729211206_InitialDatabase")]
+    [Migration("20220729220959_InitialDatabase")]
     partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

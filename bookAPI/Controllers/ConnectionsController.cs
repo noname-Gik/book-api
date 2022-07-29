@@ -51,7 +51,6 @@ namespace bookAPI.Controllers
         }
 
         // PUT: api/Connections/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutConnections(int id, Connections connections)
         {
@@ -82,7 +81,6 @@ namespace bookAPI.Controllers
         }
 
         // POST: api/Connections
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Connections>> PostConnections(Connections connections)
         {
