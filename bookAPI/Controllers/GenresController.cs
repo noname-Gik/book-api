@@ -51,6 +51,7 @@ namespace bookAPI.Controllers
         }
 
         // PUT: api/Genres/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGenres(int id, Genres genres)
         {
@@ -81,6 +82,7 @@ namespace bookAPI.Controllers
         }
 
         // POST: api/Genres
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Genres>> PostGenres(Genres genres)
         {
