@@ -33,14 +33,14 @@ namespace bookAPI.Controllers
         }
 
         // GET: api/Connections/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<List<Connections>>> GetConnections(int id)
+        [HttpGet("{name}")]
+        public async Task<ActionResult<List<Connections>>> GetConnections(string name)
         {
           if (_context.Connections == null)
           {
               return NotFound();
           }
-            var connections = await _context.Connections.Where(i => i.id == id).Include(g => g.Genre).Include(b => b.Book).Include(a => a.Author).ToListAsync();
+            var connections = await _context.Connections.Where(i => i.Book.name == name).Include(g => g.Genre).Include(b => b.Book).Include(a => a.Author).ToListAsync();
 
             if (connections == null)
             {
@@ -50,35 +50,6 @@ namespace bookAPI.Controllers
             return connections;
         }
 
-        // PUT: api/Connections/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutConnections(int id, Connections connections)
-        {
-            if (id != connections.id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(connections).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ConnectionsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/Connections
         [HttpPost]
@@ -101,7 +72,7 @@ namespace bookAPI.Controllers
             if (author == null)
                 return NotFound();
 
-            var newConnections = new Connections
+            Connections newConnections = new Connections
             {
                 Book = book,
                 Genre = genre,
@@ -111,7 +82,7 @@ namespace bookAPI.Controllers
             _context.Connections.Add(newConnections);
             await _context.SaveChangesAsync();
 
-            return await GetConnections(newConnections.id);
+            return await _context.Connections.Include(g => g.Genre).Include(b => b.Book).Include(a => a.Author).ToListAsync();
         }
 
         // DELETE: api/Connections/5
