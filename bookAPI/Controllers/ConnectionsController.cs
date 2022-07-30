@@ -82,16 +82,36 @@ namespace bookAPI.Controllers
 
         // POST: api/Connections
         [HttpPost]
-        public async Task<ActionResult<Connections>> PostConnections(Connections connections)
+        public async Task<ActionResult<List<Connections>>> PostConnections(HideConnection request)
         {
-          if (_context.Connections == null)
-          {
-              return Problem("Entity set 'DataContext.Connections'  is null.");
-          }
-            _context.Connections.Add(connections);
+            if (_context.Connections == null)
+            {
+                return Problem("Entity set 'DataContext.Connections'  is null.");
+            }
+
+            var book = await _context.Books.FindAsync(request.bookid);
+            if (book == null)
+                return NotFound();
+
+            var genre = await _context.Genres.FindAsync(request.genreid);
+            if (genre == null)
+                return NotFound();
+
+            var author = await _context.Authors.FindAsync(request.authorid);
+            if (author == null)
+                return NotFound();
+
+            var newConnections = new Connections
+            {
+                Book = book,
+                Genre = genre,
+                Author = author
+            };
+
+            _context.Connections.Add(newConnections);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetConnections", new { id = connections.id }, connections);
+            return await GetConnections(newConnections.id);
         }
 
         // DELETE: api/Connections/5

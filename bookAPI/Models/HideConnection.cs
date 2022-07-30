@@ -1,6 +1,6 @@
 ﻿namespace bookAPI.Models
 {
-    public class BGAmodel
+    public class HideConnection
     {
         public int id { get; set; }
         public int bookid { get; set; }
