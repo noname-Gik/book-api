@@ -51,14 +51,9 @@ namespace bookAPI.Controllers
         }
 
         // PUT: api/Genres/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutGenres(int id, Genres genres)
+        [HttpPut]
+        public async Task<IActionResult> PutGenres(Genres genres)
         {
-            if (id != genres.id)
-            {
-                return BadRequest();
-            }
-
             _context.Entry(genres).State = EntityState.Modified;
 
             try
@@ -67,14 +62,7 @@ namespace bookAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!GenresExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+
             }
 
             return NoContent();

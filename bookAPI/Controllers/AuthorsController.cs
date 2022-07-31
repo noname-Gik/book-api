@@ -51,38 +51,22 @@ namespace bookAPI.Controllers
         }
 
         // PUT: api/Authors/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAuthors(int id, Authors authors)
+        [HttpPut]
+        public async Task<IActionResult> PutAuthors(Authors authors)
         {
-            if (id != authors.id)
-            {
-                return BadRequest();
-            }
-
             _context.Entry(authors).State = EntityState.Modified;
-
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AuthorsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
+            }
             return NoContent();
         }
 
         // POST: api/Authors
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Authors>> PostAuthors(Authors authors)
         {

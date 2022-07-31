@@ -1,8 +1,12 @@
-﻿namespace bookAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace bookAPI.Models
 {
     public class Genres
     {
+        [Key]
         public int id { get; set; }
-        public string name { get; set; } = string.Empty;
+        [Required]
+        public string name { get; set; }
     }
 }

@@ -29,18 +29,18 @@ namespace bookAPI.Controllers
           {
               return NotFound();
           }
-            return await _context.Books.ToListAsync();
+            return await _context.Books.Include(g => g.BookGenre).ThenInclude(g => g.genid).Include(a => a.BookAuthor).ThenInclude(a => a.authid).ToListAsync();
         }
 
         // GET: api/Books/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Books>> GetBooks(int id)
+        public async Task<ActionResult<List<Books>>> GetBooks(int id)
         {
           if (_context.Books == null)
           {
               return NotFound();
           }
-            var books = await _context.Books.FindAsync(id);
+            var books = await _context.Books.Where(i => i.id == id).Include(g => g.BookGenre).ThenInclude(g => g.genid).Include(a => a.BookAuthor).ThenInclude(a => a.authid).ToListAsync();
 
             if (books == null)
             {
@@ -50,50 +50,48 @@ namespace bookAPI.Controllers
             return books;
         }
 
-        // PUT: api/Books/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutBooks(int id, Books books)
-        {
-            if (id != books.id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(books).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BooksExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/Books
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Books>> PostBooks(Books books)
+        public async Task<ActionResult<List<Books>>> PostBooks(HIDEpostbook request)
         {
           if (_context.Books == null)
           {
               return Problem("Entity set 'DataContext.Books'  is null.");
           }
-            _context.Books.Add(books);
+
+            var genre = await _context.Genres.FindAsync(request.postgenreID);
+            if (genre == null)
+                return NotFound();
+
+            var author = await _context.Authors.FindAsync(request.postathorID);
+            if (author == null)
+                return NotFound();
+
+            var newbook = new Books
+            {
+                name = request.BookName,
+            };
+
+            // получить последний ID в Books
+            // var lastbook = _context.Books.OrderByDescending(a => a.id).First();
+
+            var newgenre = new BookGenre
+            {
+                genid = genre,
+                // нет возможности обратиться к BookID
+            };
+
+            var newauthor = new BookAuthor
+            {
+                authid = author,
+                // нет возможности обратиться к BookID
+            };
+            _context.Books.Add(newbook);
+            _context.BookGenres.Add(newgenre);
+            _context.BookAuthors.Add(newauthor);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBooks", new { id = books.id }, books);
+            return await _context.Books.Include(g => g.BookGenre).ThenInclude(g => g.genid).Include(a => a.BookAuthor).ThenInclude(a => a.authid).ToListAsync();
         }
 
         // DELETE: api/Books/5

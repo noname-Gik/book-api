@@ -13,6 +13,7 @@ namespace bookAPI.Data
         public DbSet<Books> Books { get; set; }
         public DbSet<Genres> Genres { get; set; }
         public DbSet<Authors> Authors { get; set; }
-        public DbSet<Connections> Connections { get; set; }
+        public DbSet<BookGenre> BookGenres { get; set; }
+        public DbSet<BookAuthor> BookAuthors { get; set; }
     }
 }

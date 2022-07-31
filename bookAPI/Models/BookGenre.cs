@@ -2,11 +2,10 @@
 
 namespace bookAPI.Models
 {
-    public class Authors
+    public class BookGenre
     {
         [Key]
         public int id { get; set; }
-        [Required]
-        public string fullname { get; set; }
+        public Genres genid { get; set; }
     }
 }
