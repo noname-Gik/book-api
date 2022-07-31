@@ -33,14 +33,14 @@ namespace bookAPI.Controllers
         }
 
         // GET: api/Books/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<List<Books>>> GetBooks(int id)
+        [HttpGet("{name}")]
+        public async Task<ActionResult<List<Books>>> GetBooks(string name)
         {
           if (_context.Books == null)
           {
               return NotFound();
           }
-            var books = await _context.Books.Where(i => i.id == id).Include(g => g.BookGenre).ThenInclude(g => g.genid).Include(a => a.BookAuthor).ThenInclude(a => a.authid).ToListAsync();
+            var books = await _context.Books.Where(i => i.name == name).Include(g => g.BookGenre).ThenInclude(g => g.genid).Include(a => a.BookAuthor).ThenInclude(a => a.authid).ToListAsync();
 
             if (books == null)
             {
