@@ -29,7 +29,7 @@ namespace bookAPI.Controllers
           {
               return NotFound();
           }
-            return await _context.Books.Include(g => g.BookGenre).ThenInclude(g => g.genid).Include(a => a.BookAuthor).ThenInclude(a => a.authid).ToListAsync();
+            return await _context.Books.Include(g => g.BookGenre).Include(a => a.BookAuthor).ToListAsync();
         }
 
         // GET: api/Books/5
@@ -40,7 +40,7 @@ namespace bookAPI.Controllers
           {
               return NotFound();
           }
-            var books = await _context.Books.Where(i => i.name == name).Include(g => g.BookGenre).ThenInclude(g => g.genid).Include(a => a.BookAuthor).ThenInclude(a => a.authid).ToListAsync();
+            var books = await _context.Books.Where(i => i.name == name).Include(g => g.BookGenre).Include(a => a.BookAuthor).ToListAsync();
 
             if (books == null)
             {
@@ -50,48 +50,20 @@ namespace bookAPI.Controllers
             return books;
         }
 
+        // awaiting PUT-method
+
         // POST: api/Books
         [HttpPost]
-        public async Task<ActionResult<List<Books>>> PostBooks(HIDEpostbook request)
+        public async Task<ActionResult<Books>> PostBooks(Books books)
         {
           if (_context.Books == null)
           {
               return Problem("Entity set 'DataContext.Books'  is null.");
           }
-
-            var genre = await _context.Genres.FindAsync(request.postgenreID);
-            if (genre == null)
-                return NotFound();
-
-            var author = await _context.Authors.FindAsync(request.postathorID);
-            if (author == null)
-                return NotFound();
-
-            var newbook = new Books
-            {
-                name = request.BookName,
-            };
-
-            // получить последний ID в Books
-            // var lastbook = _context.Books.OrderByDescending(a => a.id).First();
-
-            var newgenre = new BookGenre
-            {
-                genid = genre,
-                // нет возможности обратиться к BookID
-            };
-
-            var newauthor = new BookAuthor
-            {
-                authid = author,
-                // нет возможности обратиться к BookID
-            };
-            _context.Books.Add(newbook);
-            _context.BookGenres.Add(newgenre);
-            _context.BookAuthors.Add(newauthor);
+            _context.Books.Add(books);
             await _context.SaveChangesAsync();
 
-            return await _context.Books.Include(g => g.BookGenre).ThenInclude(g => g.genid).Include(a => a.BookAuthor).ThenInclude(a => a.authid).ToListAsync();
+            return CreatedAtAction("GetBooks", new { id = books.id }, books);
         }
 
         // DELETE: api/Books/5

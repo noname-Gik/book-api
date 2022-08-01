@@ -1,11 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace bookAPI.Models
 {
     public class BookAuthor
     {
+        [JsonIgnore]
         [Key]
         public int id { get; set; }
-        public Authors authid { get; set; }
+        [ForeignKey("AuthorsId")]
+        public int AuthorsId { get; set; }
     }
 }
