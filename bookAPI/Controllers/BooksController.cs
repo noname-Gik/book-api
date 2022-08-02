@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using bookAPI.Data;
-using bookAPI.Models;
+using bookAPI.Models.Front;
 
 namespace bookAPI.Controllers
 {
@@ -34,13 +34,13 @@ namespace bookAPI.Controllers
 
         // GET: api/Books/5
         [HttpGet("{name}")]
-        public async Task<ActionResult<List<Books>>> GetBooks(string name)
+        public async Task<ActionResult<IEnumerable<Books>>> GetBooks(string name)
         {
           if (_context.Books == null)
           {
               return NotFound();
           }
-            var books = await _context.Books.Where(i => i.name == name).Include(g => g.BookGenre).Include(a => a.BookAuthor).ToListAsync();
+            var books = await _context.Books.Where(i => i.name.Contains(name)).Include(g => g.BookGenre).Include(a => a.BookAuthor).ToListAsync();
 
             if (books == null)
             {
@@ -50,7 +50,23 @@ namespace bookAPI.Controllers
             return books;
         }
 
-        // awaiting PUT-method
+        // PUT: api/Books/5
+        [HttpPut]
+        public async Task<ActionResult<Books>> PutBooks(Books books)
+        {
+            _context.Entry(books).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+
+            }
+
+            return NoContent();
+        }
 
         // POST: api/Books
         [HttpPost]
