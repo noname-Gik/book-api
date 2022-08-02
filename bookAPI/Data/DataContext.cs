@@ -1,5 +1,4 @@
-﻿using bookAPI.Models.Back;
-using bookAPI.Models.Front;
+﻿using bookAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace bookAPI.Data

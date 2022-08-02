@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using bookAPI.Data;
-using bookAPI.Models.Front;
+using bookAPI.Models;
 
 namespace bookAPI.Controllers
 {
@@ -52,7 +52,7 @@ namespace bookAPI.Controllers
 
         // PUT: api/Authors/5
         [HttpPut]
-        public async Task<IActionResult> PutAuthors(Authors authors)
+        public async Task<IActionResult> PutAuthors([FromBody] Authors authors)
         {
 
             _context.Entry(authors).State = EntityState.Modified;
