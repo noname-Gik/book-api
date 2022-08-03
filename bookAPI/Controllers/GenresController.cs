@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using bookAPI.Data;
 using bookAPI.Models;
@@ -33,14 +28,14 @@ namespace bookAPI.Controllers
         }
 
         // GET: api/Genres/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Genres>> GetGenres(int id)
+        [HttpGet("{name}")]
+        public async Task<ActionResult<List<Genres>>> GetGenres(string name)
         {
           if (_context.Genres == null)
           {
               return NotFound();
           }
-            var genres = await _context.Genres.FindAsync(id);
+            var genres = await _context.Genres.Where(i => i.name.Contains(name)).ToListAsync();
 
             if (genres == null)
             {
@@ -51,11 +46,15 @@ namespace bookAPI.Controllers
         }
 
         // PUT: api/Genres/5
-        [HttpPut]
-        public async Task<IActionResult> PutGenres([FromBody] Genres genres)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutGenres([FromRoute] int id, Genres genres)
         {
+            var found = await _context.Genres.FindAsync(id);
 
-            _context.Entry(genres).State = EntityState.Modified;
+            if (found is null)
+                return NotFound();
+
+            found.name = genres.name;
 
             try
             {
@@ -63,7 +62,14 @@ namespace bookAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-
+                if (!GenresExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
 
             return NoContent();

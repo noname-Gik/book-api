@@ -4,12 +4,11 @@ using System.Text.Json.Serialization;
 
 namespace bookAPI.Models
 {
+    // Используется для демонстрации информации
     public class BookGenre
     {
-        [JsonIgnore]
-        [Required]
         [Key]
-        public int id { get; set; }
+        public int id { get; protected set; }
         [ForeignKey("GenresId")]
         [Required]
         public int GenresId { get; set; }

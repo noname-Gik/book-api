@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using bookAPI.Data;
 using bookAPI.Models;
@@ -25,10 +20,10 @@ namespace bookAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Books>>> GetBooks()
         {
-          if (_context.Books == null)
-          {
-              return NotFound();
-          }
+            if (_context.Books == null)
+            {
+                return NotFound();
+            }
             return await _context.Books.Include(g => g.BookGenre).Include(a => a.BookAuthor).ToListAsync();
         }
 
@@ -36,10 +31,10 @@ namespace bookAPI.Controllers
         [HttpGet("{name}")]
         public async Task<ActionResult<IEnumerable<Books>>> GetBooks(string name)
         {
-          if (_context.Books == null)
-          {
-              return NotFound();
-          }
+            if (_context.Books == null)
+            {
+                return NotFound();
+            }
             var books = await _context.Books.Where(i => i.name.Contains(name)).Include(g => g.BookGenre).Include(a => a.BookAuthor).ToListAsync();
 
             if (books == null)
@@ -51,22 +46,34 @@ namespace bookAPI.Controllers
         }
 
         // PUT: api/Books/5
-        [HttpPut]
-        public async Task<ActionResult<Books>> PutBooks(int id, Books books)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutBooks([FromRoute] int id, Books books)
         {
-            if (_context.Books == null)
-            {
-                return NotFound();
+            var found = await _context.Books.FindAsync(id);
+
+            if (found is null)
+            { 
+                return NotFound(); 
             }
+
+            found.name = books.name;
+            found.BookAuthor = books.BookAuthor;
+            found.BookGenre = books.BookGenre;
 
             try
             {
-                _context.Books.Update(books);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                return NotFound();
+                if (!BooksExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
 
             return NoContent();

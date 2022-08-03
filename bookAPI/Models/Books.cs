@@ -3,10 +3,11 @@ using System.Text.Json.Serialization;
 
 namespace bookAPI.Models
 {
+    // Используется для демонстрации информации
     public class Books
     {
         [Key]
-        public int id { get; set; }
+        public int id { get; protected set; }
         [Required]
         public string name { get; set; }
         public List<BookGenre> BookGenre { get; set; }

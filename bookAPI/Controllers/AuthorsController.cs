@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using bookAPI.Data;
 using bookAPI.Models;
@@ -33,14 +28,14 @@ namespace bookAPI.Controllers
         }
 
         // GET: api/Authors/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Authors>> GetAuthors(int id)
+        [HttpGet("{fullname}")]
+        public async Task<ActionResult<List<Authors>>> GetAuthors(string fullname)
         {
           if (_context.Authors == null)
           {
               return NotFound();
           }
-            var authors = await _context.Authors.FindAsync(id);
+            var authors = await _context.Authors.Where(i => i.fullname.Contains(fullname)).ToListAsync();
 
             if (authors == null)
             {
@@ -51,11 +46,15 @@ namespace bookAPI.Controllers
         }
 
         // PUT: api/Authors/5
-        [HttpPut]
-        public async Task<IActionResult> PutAuthors([FromBody] Authors authors)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAuthors([FromRoute] int id, Authors authors)
         {
+            var found = await _context.Authors.FindAsync(id);
 
-            _context.Entry(authors).State = EntityState.Modified;
+            if (found is null)
+                return NotFound();
+
+            found.fullname = authors.fullname;
 
             try
             {
@@ -63,7 +62,14 @@ namespace bookAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-
+                if (!AuthorsExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
 
             return NoContent();
