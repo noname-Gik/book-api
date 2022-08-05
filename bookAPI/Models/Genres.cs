@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace bookAPI.Models
+namespace BookAPI.Models
 {
     // Используется для демонстрации информации
     public class Genres

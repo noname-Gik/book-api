@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\USER\\Desktop\\apiwork\\bookAPI\\bookAPI.csproj": {}
+    "C:\\Users\\USER\\Desktop\\apiwork\\bookAPI\\BookAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\USER\\Desktop\\apiwork\\bookAPI\\bookAPI.csproj": {
+    "C:\\Users\\USER\\Desktop\\apiwork\\bookAPI\\BookAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\USER\\Desktop\\apiwork\\bookAPI\\bookAPI.csproj",
-        "projectName": "bookAPI",
-        "projectPath": "C:\\Users\\USER\\Desktop\\apiwork\\bookAPI\\bookAPI.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Desktop\\apiwork\\bookAPI\\BookAPI.csproj",
+        "projectName": "BookAPI",
+        "projectPath": "C:\\Users\\USER\\Desktop\\apiwork\\bookAPI\\BookAPI.csproj",
         "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\USER\\Desktop\\apiwork\\bookAPI\\obj\\",
         "projectStyle": "PackageReference",
@@ -51,10 +51,6 @@
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
-              "target": "Package",
-              "version": "[6.0.7, )"
-            },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[6.0.7, )"
             },

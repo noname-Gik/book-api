@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using bookAPI.Data;
-using bookAPI.Models;
+using BookAPI.Models;
+using BookAPI.Data;
 
-namespace bookAPI.Controllers
+namespace BookAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -56,12 +56,12 @@ namespace bookAPI.Controllers
                 return NotFound(); 
             }
 
-            found.name = books.name;
-            found.BookAuthor = books.BookAuthor;
-            found.BookGenre = books.BookGenre;
-
             try
             {
+                // Добавление новой книги
+                found.name = books.name;
+                found.BookAuthor = books.BookAuthor;
+                found.BookGenre = books.BookGenre;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

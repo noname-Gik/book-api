@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using bookAPI.Data;
-using bookAPI.Models;
+using BookAPI.Models;
+using BookAPI.Data;
 
-namespace bookAPI.Controllers
+namespace BookAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

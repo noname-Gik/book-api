@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace bookAPI.Models
+namespace BookAPI.Models
 {
     // Используется для демонстрации информации
     public class BookAuthor
